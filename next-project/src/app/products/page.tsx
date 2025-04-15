@@ -7,176 +7,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
-
-// Mock data for products (in a real app, this would come from an API or database)
-const allProducts = [
-  {
-    id: 1,
-    name: "NVIDIA RTX 4070 Graphics Card",
-    description: "Next-gen ray tracing performance for gamers and creators",
-    price: 599.99,
-    image: "/gpu.jpg",
-    emoji: "🎮",
-    category: "graphics-cards",
-    brand: "NVIDIA"
-  },
-  {
-    id: 2,
-    name: "Intel Core i9-13900K Processor",
-    description: "Unlocked 24-core, 32-thread for extreme performance",
-    price: 549.99,
-    image: "/cpu.jpg",
-    emoji: "⚡",
-    category: "processors",
-    brand: "Intel"
-  },
-  {
-    id: 3,
-    name: "ASUS ROG Gaming Monitor 27\" 165Hz",
-    description: "QHD IPS panel with 1ms response time",
-    price: 349.99,
-    image: "/monitor.jpg",
-    emoji: "🖥️",
-    category: "peripherals",
-    brand: "ASUS"
-  },
-  {
-    id: 4,
-    name: "Corsair Vengeance 32GB DDR5 RAM",
-    description: "High-performance memory for gaming and productivity",
-    price: 189.99,
-    image: "/ram.jpg",
-    emoji: "💾",
-    category: "memory",
-    brand: "Corsair"
-  },
-  {
-    id: 5,
-    name: "Samsung 2TB 980 PRO NVMe SSD",
-    description: "Ultra-fast storage with read speeds up to 7,000 MB/s",
-    price: 219.99,
-    emoji: "💿",
-    category: "storage",
-    brand: "Samsung"
-  },
-  {
-    id: 6,
-    name: "ASUS ROG Strix Z790-E Gaming Motherboard",
-    description: "Premium Intel LGA 1700 motherboard with PCIe 5.0 and WiFi 6E",
-    price: 429.99,
-    emoji: "🔄",
-    category: "motherboards",
-    brand: "ASUS"
-  },
-  {
-    id: 7,
-    name: "Corsair RM850x Power Supply",
-    description: "850W fully modular PSU with 80 PLUS Gold certification",
-    price: 149.99,
-    emoji: "🔌",
-    category: "power-supplies",
-    brand: "Corsair"
-  },
-  {
-    id: 8,
-    name: "NZXT H7 Flow PC Case",
-    description: "Mid-tower ATX case with excellent airflow and cable management",
-    price: 129.99,
-    emoji: "🖥️",
-    category: "cases",
-    brand: "NZXT"
-  },
-  {
-    id: 9,
-    name: "Noctua NH-D15 CPU Cooler",
-    description: "Dual-tower design with quiet 140mm fans for maximum cooling",
-    price: 99.99,
-    emoji: "❄️",
-    category: "cooling",
-    brand: "Noctua"
-  },
-  {
-    id: 10,
-    name: "Logitech G Pro X Superlight Wireless Mouse",
-    description: "Ultra-lightweight gaming mouse with HERO 25K sensor",
-    price: 149.99,
-    emoji: "🖱️",
-    category: "peripherals",
-    brand: "Logitech"
-  },
-  {
-    id: 11,
-    name: "Razer Huntsman V2 Mechanical Keyboard",
-    description: "Optical switches with 8000Hz polling rate for competitive gaming",
-    price: 189.99,
-    emoji: "⌨️",
-    category: "peripherals",
-    brand: "Razer"
-  },
-  {
-    id: 12,
-    name: "MSI Katana 15 Gaming Laptop",
-    description: "Intel Core i7, RTX 4060, 16GB RAM, 1TB SSD, 15.6\" 144Hz display",
-    price: 1299.99,
-    emoji: "💻",
-    category: "laptops",
-    brand: "MSI"
-  },
-  {
-    id: 13,
-    name: "AMD Ryzen 9 7950X3D Processor",
-    description: "16-core, 32-thread with 3D V-Cache for ultimate gaming performance",
-    price: 649.99,
-    emoji: "⚡",
-    category: "processors",
-    brand: "AMD"
-  },
-  {
-    id: 14,
-    name: "Gigabyte AORUS 4TB M.2 NVMe SSD",
-    description: "Ultra-fast PCIe 4.0 storage with heatsink for sustained performance",
-    price: 399.99,
-    emoji: "💿",
-    category: "storage",
-    brand: "Gigabyte"
-  },
-  {
-    id: 15,
-    name: "EVGA SuperNOVA 1000 G6 Power Supply",
-    description: "1000W fully modular PSU with 80 PLUS Gold certification",
-    price: 179.99,
-    emoji: "🔌",
-    category: "power-supplies",
-    brand: "EVGA"
-  },
-  {
-    id: 16,
-    name: "MSI MPG X670E Carbon WiFi Motherboard",
-    description: "AMD AM5 socket motherboard with PCIe 5.0 and DDR5 support",
-    price: 379.99,
-    emoji: "🔄",
-    category: "motherboards",
-    brand: "MSI"
-  },
-  {
-    id: 17,
-    name: "ASUS TUF Gaming VG27AQ Monitor",
-    description: "27\" 1440p IPS monitor with 165Hz refresh rate and G-SYNC",
-    price: 329.99,
-    emoji: "🖥️",
-    category: "peripherals",
-    brand: "ASUS"
-  },
-  {
-    id: 18,
-    name: "Corsair iCUE H150i Elite LCD Cooler",
-    description: "360mm AIO liquid cooler with customizable LCD display",
-    price: 259.99,
-    emoji: "❄️",
-    category: "cooling",
-    brand: "Corsair"
-  },
-];
+import { productData, formatPrice } from "@/lib/utils";
 
 // Price ranges
 const priceRanges = [
@@ -191,19 +22,19 @@ const priceRanges = [
 const categories = [
   { id: 1, name: "All Products", slug: "all" },
   { id: 2, name: "CPUs & Processors", slug: "processors" },
-  { id: 3, name: "Graphics Cards", slug: "graphics-cards" },
-  { id: 4, name: "Motherboards", slug: "motherboards" },
-  { id: 5, name: "Memory (RAM)", slug: "memory" },
+  { id: 3, name: "Graphics Cards", slug: "gpu" },
+  { id: 4, name: "Motherboards", slug: "motherboard" },
+  { id: 5, name: "Memory (RAM)", slug: "ram" },
   { id: 6, name: "Storage", slug: "storage" },
-  { id: 7, name: "Power Supplies", slug: "power-supplies" },
-  { id: 8, name: "PC Cases", slug: "cases" },
-  { id: 9, name: "Cooling", slug: "cooling" },
+  { id: 7, name: "Power Supplies", slug: "power-supply" },
+  { id: 8, name: "PC Cases", slug: "case" },
+  { id: 9, name: "Cooling", slug: "cooler" },
   { id: 10, name: "Peripherals", slug: "peripherals" },
   { id: 11, name: "Laptops", slug: "laptops" },
 ];
 
 // Get all unique brands from products
-const brands = [...new Set(allProducts.map(product => product.brand))].sort();
+const brands = [...new Set(productData.map(product => product.brand))].sort();
 
 export default function ProductsPage() {
   const { addToCart } = useCart();
@@ -217,8 +48,8 @@ export default function ProductsPage() {
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState(allProducts);
-  const [displayedProducts, setDisplayedProducts] = useState(allProducts);
+  const [filteredProducts, setFilteredProducts] = useState(productData);
+  const [displayedProducts, setDisplayedProducts] = useState(productData);
   
   // Pagination settings
   const productsPerPage = 9;
@@ -234,7 +65,7 @@ export default function ProductsPage() {
   
   // Apply filters and sorting whenever filter state changes
   useEffect(() => {
-    let results = [...allProducts];
+    let results = [...productData];
     
     // Filter by category
     if (activeCategory !== 'all') {
@@ -335,11 +166,6 @@ export default function ProductsPage() {
       // Scroll to top of products section
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  };
-  
-  // Format price with BDT currency
-  const formatPrice = (price: number) => {
-    return `BDT ${price.toLocaleString()}`;
   };
 
   return (
@@ -468,7 +294,7 @@ export default function ProductsPage() {
               {displayedProducts.length > 0 ? (
                 displayedProducts.map((product) => (
                   <ProductCard
-                    key={product.id}
+                    key={product.id.toString()}
                     id={product.id.toString()}
                     title={product.name}
                     price={product.price}

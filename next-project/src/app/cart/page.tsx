@@ -679,13 +679,15 @@ export default function CartPage() {
                       <div className="max-h-60 overflow-auto">
                         {cartItems.map(item => (
                           <div key={item.id} className="flex justify-between items-start py-2">
-                            <div className="flex items-start">
-                              <div className="text-neutral-500 mr-2 leading-none">{item.quantity} <span className="leading-none">×</span></div>
-                              <div className="pr-6">
-                                <div className="font-medium line-clamp-1">{item.name}</div>
+                            <div className="flex items-start min-w-0">
+                              <span className="whitespace-nowrap text-neutral-500 mr-2 flex-shrink-0">
+                                {item.quantity} ×
+                              </span>
+                              <div className="min-w-0 pr-4">
+                                <div className="font-medium truncate">{item.name}</div>
                               </div>
                             </div>
-                            <div className="whitespace-nowrap">{formatPrice(item.price * item.quantity)}</div>
+                            <div className="whitespace-nowrap flex-shrink-0">{formatPrice(item.price * item.quantity)}</div>
                           </div>
                         ))}
                       </div>

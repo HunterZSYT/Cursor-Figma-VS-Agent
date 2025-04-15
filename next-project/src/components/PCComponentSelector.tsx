@@ -5,19 +5,9 @@ import { Button } from './ui/button';
 import Image from 'next/image';
 import { Card } from './ui/card';
 import { ProductCard } from './ProductCard';
+import { Product, formatPrice } from '@/lib/utils';
 
 // Types
-export interface PCComponent {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  emoji: string;
-  category: string;
-  brand: string;
-  compatibility?: string[];
-}
-
 interface ComponentCategory {
   id: string;
   name: string;
@@ -29,9 +19,9 @@ interface ComponentCategory {
 interface PCComponentSelectorProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (component: PCComponent) => void;
+  onSelect: (component: Product) => void;
   category: ComponentCategory | null;
-  products: PCComponent[];
+  products: Product[];
 }
 
 export function PCComponentSelector({
@@ -86,11 +76,6 @@ export function PCComponentSelector({
       }
     });
 
-  // Format price 
-  const formatPrice = (price: number) => {
-    return "BDT " + price.toLocaleString();
-  };
-
   // Clear all filters
   const clearFilters = () => {
     setSortOption("price-asc");
@@ -100,7 +85,7 @@ export function PCComponentSelector({
   };
 
   // Handle button click to add component
-  const handleAddComponent = (component: PCComponent) => {
+  const handleAddComponent = (component: Product) => {
     onSelect(component);
   };
 
@@ -228,7 +213,7 @@ export function PCComponentSelector({
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}
-                    id={product.id}
+                    id={product.id.toString()}
                     title={product.name}
                     price={product.price}
                     image={product.image || "/next.svg"}

@@ -116,7 +116,7 @@ export default function Home() {
           <p className="text-center mb-10 text-neutral-600 max-w-2xl mx-auto">Find exactly what you need from our extensive range of computer hardware, components, and accessories</p>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((category) => (
-              <Link href={`/category/${category.slug}`} key={category.id} className="block">
+              <Link href={`/products?category=${category.slug}`} key={category.id} className="block">
                 <Card className="text-center hover:shadow-md transition-shadow h-full border-neutral-200 hover:border-blue-200">
                   <CardContent className="pt-6">
                     <span className="text-4xl block mb-4">{category.icon}</span>
