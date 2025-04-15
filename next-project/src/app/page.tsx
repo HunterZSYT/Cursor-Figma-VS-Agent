@@ -10,7 +10,7 @@ const featuredProducts = [
     id: 1,
     name: "NVIDIA RTX 4070 Graphics Card",
     description: "Next-gen ray tracing performance for gamers and creators",
-    price: 599.99,
+    price: 59999,
     image: "/gpu.jpg",
     emoji: "🎮"
   },
@@ -18,7 +18,7 @@ const featuredProducts = [
     id: 2,
     name: "Intel Core i9-13900K Processor",
     description: "Unlocked 24-core, 32-thread for extreme performance",
-    price: 549.99,
+    price: 54999,
     image: "/cpu.jpg",
     emoji: "⚡"
   },
@@ -26,7 +26,7 @@ const featuredProducts = [
     id: 3,
     name: "ASUS ROG Gaming Monitor 27\" 165Hz",
     description: "QHD IPS panel with 1ms response time",
-    price: 349.99,
+    price: 34999,
     image: "/monitor.jpg",
     emoji: "🖥️"
   },
@@ -34,7 +34,7 @@ const featuredProducts = [
     id: 4,
     name: "Corsair Vengeance 32GB DDR5 RAM",
     description: "High-performance memory for gaming and productivity",
-    price: 189.99,
+    price: 18999,
     image: "/ram.jpg",
     emoji: "💾"
   },

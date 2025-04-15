@@ -680,7 +680,7 @@ export default function CartPage() {
                         {cartItems.map(item => (
                           <div key={item.id} className="flex justify-between items-start py-2">
                             <div className="flex items-start">
-                              <div className="text-neutral-500 mr-2">{item.quantity} ×</div>
+                              <div className="text-neutral-500 mr-2 leading-none">{item.quantity} <span className="leading-none">×</span></div>
                               <div className="pr-6">
                                 <div className="font-medium line-clamp-1">{item.name}</div>
                               </div>

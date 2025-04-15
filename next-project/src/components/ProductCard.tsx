@@ -37,17 +37,13 @@ export function ProductCard({
 }: ProductCardProps) {
   const { addToCart } = useCart();
 
-  const formattedPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(price);
+  // Update to use BDT currency format
+  const formatPrice = (value: number) => {
+    return `BDT ${value.toLocaleString()}`;
+  };
   
-  const formattedOriginalPrice = originalPrice
-    ? new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(originalPrice)
-    : null;
+  const formattedPrice = formatPrice(price);
+  const formattedOriginalPrice = originalPrice ? formatPrice(originalPrice) : null;
 
   const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
   

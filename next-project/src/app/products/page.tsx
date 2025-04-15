@@ -6,6 +6,7 @@ import { Navbar } from "@/components/Navbar";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useCart } from "@/lib/CartContext";
 
 // Mock data for products (in a real app, this would come from an API or database)
 const allProducts = [
@@ -179,11 +180,11 @@ const allProducts = [
 
 // Price ranges
 const priceRanges = [
-  { id: "price-1", label: "Under $100", min: 0, max: 99.99 },
-  { id: "price-2", label: "$100 - $200", min: 100, max: 200 },
-  { id: "price-3", label: "$200 - $500", min: 200, max: 500 },
-  { id: "price-4", label: "$500 - $1000", min: 500, max: 1000 },
-  { id: "price-5", label: "Over $1000", min: 1000, max: 100000 }
+  { id: "price-1", label: "Under BDT 10,000", min: 0, max: 9999 },
+  { id: "price-2", label: "BDT 10,000 - 20,000", min: 10000, max: 20000 },
+  { id: "price-3", label: "BDT 20,000 - 50,000", min: 20000, max: 50000 },
+  { id: "price-4", label: "BDT 50,000 - 100,000", min: 50000, max: 100000 },
+  { id: "price-5", label: "Over BDT 100,000", min: 100000, max: 10000000 }
 ];
 
 // Categories for filtering
@@ -205,6 +206,7 @@ const categories = [
 const brands = [...new Set(allProducts.map(product => product.brand))].sort();
 
 export default function ProductsPage() {
+  const { addToCart } = useCart();
   // Get URL parameters
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -335,6 +337,11 @@ export default function ProductsPage() {
     }
   };
   
+  // Format price with BDT currency
+  const formatPrice = (price: number) => {
+    return `BDT ${price.toLocaleString()}`;
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />

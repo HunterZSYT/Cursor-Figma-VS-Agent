@@ -35,12 +35,9 @@ export function CartDropdown() {
     };
   }, [isCartOpen, setIsCartOpen]);
 
-  // Format price with currency
+  // Format price with BDT currency
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(price);
+    return `BDT ${price.toLocaleString()}`;
   };
 
   if (!isCartOpen) return null;
@@ -55,7 +52,7 @@ export function CartDropdown() {
           <h3 className="font-semibold text-lg">Shopping Cart</h3>
           <button 
             onClick={() => setIsCartOpen(false)} 
-            className="text-neutral-400 hover:text-neutral-700 text-xl"
+            className="text-neutral-400 hover:text-neutral-700 text-xl leading-none"
           >
             ×
           </button>
@@ -88,7 +85,9 @@ export function CartDropdown() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm line-clamp-2 mb-1">{item.name}</p>
-                    <p className="text-sm text-neutral-600">{formatPrice(item.price)}</p>
+                    <p className="text-sm text-neutral-600">
+                      {item.price > 0 ? formatPrice(item.price) : formatPrice(0)}
+                    </p>
                   </div>
                   <div className="flex flex-col items-end">
                     <div className="flex items-center border rounded-md mb-1">
@@ -109,6 +108,7 @@ export function CartDropdown() {
                     <button 
                       className="text-red-600 text-xs hover:underline"
                       onClick={() => removeFromCart(item.id)}
+                      aria-label="Remove item"
                     >
                       Remove
                     </button>

@@ -285,8 +285,13 @@ export default function PCBuilderPage() {
     alert('PC configuration saved successfully!');
   };
 
-  // Add to cart functionality - Updated to use CartContext
+  // Add to cart functionality - Updated to use CartContext and fix pricing
   const handleAddToCart = () => {
+    // Calculate total price of the PC build
+    const totalPrice = Object.values(selectedComponents)
+      .filter(Boolean)
+      .reduce((sum, component) => sum + (component?.price || 0), 0);
+    
     // Add all selected components to cart
     Object.values(selectedComponents).forEach(component => {
       if (component) {
@@ -302,10 +307,12 @@ export default function PCBuilderPage() {
     });
     
     // Add a custom PC build item that represents the full build
+    // Use the actual total price instead of 0
+    const componentCount = Object.values(selectedComponents).filter(Boolean).length;
     addToCart({
       id: `pc-build-${Date.now()}`,
-      name: `Custom PC Build (${Object.values(selectedComponents).filter(Boolean).length} components)`,
-      price: 0, // Price is 0 since we're already adding each component individually
+      name: `Custom PC Build (${componentCount} components)`,
+      price: totalPrice,
       image: '',
       emoji: '🖥️',
       category: 'pc-build'
