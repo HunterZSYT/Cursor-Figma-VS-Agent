@@ -154,7 +154,9 @@ export default function Home() {
                   Extended warranty options available
                 </li>
               </ul>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white transition-colors">Design Your Custom PC</Button>
+              <Link href="/pc-builder">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white transition-colors">Design Your Custom PC</Button>
+              </Link>
             </div>
             <div className="lg:w-1/2 flex justify-center">
               <div className="h-80 w-80 bg-white rounded-lg shadow-lg flex items-center justify-center">

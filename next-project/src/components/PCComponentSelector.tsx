@@ -54,7 +54,7 @@ export function PCComponentSelector({
   const filteredProducts = products
     .filter(product => 
       // Brand filter
-      (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
+      (selectedBrands.length === 0 || selectedBrands.includes(product.brand ?? "")) &&
       // Search query
       (searchQuery === "" || product.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
       // Price range filter
@@ -142,12 +142,12 @@ export function PCComponentSelector({
                       <input 
                         type="checkbox" 
                         id={`brand-${brand}`} 
-                        checked={selectedBrands.includes(brand)}
+                        checked={selectedBrands.includes(brand ?? "")}
                         onChange={() => {
-                          if (selectedBrands.includes(brand)) {
-                            setSelectedBrands(selectedBrands.filter(b => b !== brand));
+                          if (selectedBrands.includes(brand ?? "")) {
+                            setSelectedBrands(selectedBrands.filter(b => b !== (brand ?? "")));
                           } else {
-                            setSelectedBrands([...selectedBrands, brand]);
+                            setSelectedBrands([...selectedBrands, brand ?? ""]);
                           }
                         }}
                         className="mr-2 cursor-pointer"
@@ -212,13 +212,13 @@ export function PCComponentSelector({
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredProducts.map((product) => (
                   <ProductCard
-                    key={product.id}
-                    id={product.id.toString()}
+                    key={product.id?.toString() ?? ""}
+                    id={product.id?.toString() ?? ""}
                     title={product.name}
                     price={product.price}
                     image={product.image || "/next.svg"}
-                    category={product.category}
-                    emoji={product.emoji}
+                    category={product.category ?? ""}
+                    emoji={product.emoji ?? ""}
                     buttonText="Add"
                     onButtonClick={() => handleAddComponent(product)}
                     buttonVariant="default"

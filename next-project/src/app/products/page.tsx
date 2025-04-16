@@ -7,7 +7,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useCart } from "@/lib/CartContext";
-import { productData, formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
+import { getProducts } from "@/lib/data/api";
+import { Product } from "@/lib/types";
 
 // Price ranges
 const priceRanges = [
@@ -33,23 +35,43 @@ const categories = [
   { id: 11, name: "Laptops", slug: "laptops" },
 ];
 
-// Get all unique brands from products
-const brands = [...new Set(productData.map(product => product.brand))].sort();
-
 export default function ProductsPage() {
   const { addToCart } = useCart();
   // Get URL parameters
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  // State for filtering and sorting
+  // State for products and filtering
+  const [products, setProducts] = useState<Product[]>([]);
+  const [brands, setBrands] = useState<string[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [sortOption, setSortOption] = useState("featured");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState(productData);
-  const [displayedProducts, setDisplayedProducts] = useState(productData);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Fetch products on component mount
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getProducts();
+        setProducts(data);
+        // Extract unique brands
+        const uniqueBrands = [...new Set(data.map(product => product.brand || "Unknown"))].filter(Boolean).sort();
+        setBrands(uniqueBrands);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setIsLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
   
   // Pagination settings
   const productsPerPage = 9;
@@ -65,7 +87,9 @@ export default function ProductsPage() {
   
   // Apply filters and sorting whenever filter state changes
   useEffect(() => {
-    let results = [...productData];
+    if (!products.length) return;
+    
+    let results = [...products];
     
     // Filter by category
     if (activeCategory !== 'all') {
@@ -88,7 +112,7 @@ export default function ProductsPage() {
     // Filter by brands
     if (selectedBrands.length > 0) {
       results = results.filter(product => 
-        selectedBrands.includes(product.brand)
+        product.brand && selectedBrands.includes(product.brand)
       );
     }
     
@@ -112,7 +136,7 @@ export default function ProductsPage() {
     setFilteredProducts(results);
     // Reset to first page when filters change
     setCurrentPage(1);
-  }, [activeCategory, selectedPriceRanges, selectedBrands, sortOption]);
+  }, [activeCategory, selectedPriceRanges, selectedBrands, sortOption, products]);
   
   // Update displayed products based on pagination
   useEffect(() => {

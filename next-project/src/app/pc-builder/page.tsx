@@ -167,10 +167,11 @@ export default function PCBuilderPage() {
       .filter(Boolean)
       .forEach(component => {
         if (component) {
-          // Convert the component to match CartItem type by ensuring id is a string
+          // Convert the component to match CartItem type by ensuring required fields
           addToCart({
             ...component,
-            id: component.id.toString() // Convert id to string to match CartItem type
+            id: component.id.toString(), // Convert id to string to match CartItem type
+            image: component.image || "/next.svg" // Provide default image if none exists
           });
         }
       });

@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { useCart } from "@/lib/CartContext";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   id: string;
@@ -19,6 +20,8 @@ interface ProductCardProps {
   buttonVariant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
   emoji?: string;
   showAddToCart?: boolean;
+  discountPercent?: number;
+  discountEnabled?: boolean;
 }
 
 export function ProductCard({
@@ -33,19 +36,14 @@ export function ProductCard({
   onButtonClick,
   buttonVariant = "default",
   emoji,
-  showAddToCart = true
+  showAddToCart = true,
+  discountPercent,
+  discountEnabled
 }: ProductCardProps) {
   const { addToCart } = useCart();
-
-  // Update to use BDT currency format
-  const formatPrice = (value: number) => {
-    return `BDT ${value.toLocaleString()}`;
-  };
   
-  const formattedPrice = formatPrice(price);
-  const formattedOriginalPrice = originalPrice ? formatPrice(originalPrice) : null;
-
-  const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
+  // Calculate discount if enabled but not explicitly provided
+  const discount = discountEnabled ? (discountPercent || (originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0)) : 0;
   
   const handleButtonClick = (e: React.MouseEvent) => {
     if (onButtonClick) {
@@ -121,10 +119,10 @@ export function ProductCard({
         )}
         
         <div className="flex items-baseline gap-2 mb-3">
-          <span className="font-bold text-lg">{formattedPrice}</span>
-          {formattedOriginalPrice && (
+          <span className="font-bold text-lg">{formatPrice(price)}</span>
+          {(originalPrice && discount > 0) && (
             <span className="text-neutral-500 line-through text-sm">
-              {formattedOriginalPrice}
+              {formatPrice(originalPrice)}
             </span>
           )}
         </div>
